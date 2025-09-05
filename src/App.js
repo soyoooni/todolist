@@ -23,10 +23,18 @@ const TodoItemInputField = (props) => {
     />
     <Button variant="outlined" onClick={onSubmit}>저장</Button>
   </div>);
-}
+};
+const TodoItem = (props) => {
+  const style = props.todoItem.isFinished ? {textDecoration: 'line-through'} : {};
+  return (<li>
+    <span style={style} onClick={()=>
+      props.onTodoItemClick(props.todoItem)}>{props.todoItemcontent}</span>
+  </li>);
+};
+
 const TodoItemList = (props) => {
   const todoList = props.todoItemList.map((todoItem, index)=> {
-    return <li key={index}>{todoItem.todoItemcontent}</li>;
+    return <TodoItem key={index} todoItem={todoItem} onTodoItemClick={props.onTodoItemClick}/>;
   });
   return (<div>
     <ul>{todoList}</ul>
