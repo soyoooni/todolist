@@ -22,11 +22,16 @@ const TodoItemInputField = (props) => {
     <Button variant="outlined" onClick={onSubmit}>저장</Button>
   </div>);
 }
+const TodoItemList = (props) => {
+  return (<div>
+  </div>);
+};
 
 function App() {
   return (
     <div className="App">
-      <TodoItemInputField onSubmit={(input)=>{console.log(input)}}/>      
+      <TodoItemInputField onSubmit={(input)=>{console.log(input)}}/>
+      <TodoItemList />
     </div>
   );
 }
