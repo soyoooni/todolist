@@ -23,7 +23,11 @@ const TodoItemInputField = (props) => {
   </div>);
 }
 const TodoItemList = (props) => {
+  const todoList = props.todoItemList.map((todoItem, index)=> {
+    return <li key={index}>{todoItem.todoItemcontent}</li>;
+  });
   return (<div>
+    <ul>{todoList}</ul>
   </div>);
 };
 
@@ -31,7 +35,7 @@ function App() {
   return (
     <div className="App">
       <TodoItemInputField onSubmit={(input)=>{console.log(input)}}/>
-      <TodoItemList />
+      <TodoItemList todoItemList={[]}/>
     </div>
   );
 }
