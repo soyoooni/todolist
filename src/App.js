@@ -32,10 +32,12 @@ const TodoItemList = (props) => {
 };
 
 function App() {
+  const [todoItemList, setTodoItemList]= useState([]);
+
   return (
     <div className="App">
       <TodoItemInputField onSubmit={(input)=>{console.log(input)}}/>
-      <TodoItemList todoItemList={[]}/>
+      <TodoItemList todoItemList={todoItemList}/>
     </div>
   );
 }
