@@ -2,8 +2,30 @@ import './App.css';
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, setDoc, doc } from "firebase/firestore";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-let todoItemId = 0;
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBVf30fDIHu9pkzdXIjcZGjEkUCGO1C_YQ",
+  authDomain: "todo-list-app-demo-aac73.firebaseapp.com",
+  projectId: "todo-list-app-demo-aac73",
+  storageBucket: "todo-list-app-demo-aac73.firebasestorage.app",
+  messagingSenderId: "385330372955",
+  appId: "1:385330372955:web:18b556c6f1482bdf4f7a7e",
+  measurementId: "G-G5NPS76ET7"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
 
 const TodoItemInputField = (props) => {
   const [input, setInput] =useState("");
@@ -49,15 +71,22 @@ const TodoItemList = (props) => {
 function App() {
   const [todoItemList, setTodoItemList]= useState([]);
 
-  const onSubmit = (newTodoItem) => {
+  const onSubmit = async (newTodoItem) => {
+    const docRef = await addDoc(collection(db, "todoItem"), {
+      todoItemContent: newTodoItem,
+      isFinished: false,
+    });
+
     setTodoItemList([...todoItemList, {
-      id:todoItemId ++,
+      id:docRef.id,
       todoItemContent: newTodoItem,
       isFinished: false,
     }])
   }
 
-  const onTodoItemClick = (clickedTodoItem)=> {
+  const onTodoItemClick = async (clickedTodoItem)=> {
+    const todoItemRef = doc(db, "todoItem", clickedTodoItem.id);
+    await setDoc(todoItemRef, {isFinished: !clickedTodoItem.isFinished}, {merge:true});
     setTodoItemList(todoItemList.map((todoItem)=>{
       if (clickedTodoItem.id === todoItem.id){
         return{
