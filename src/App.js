@@ -19,6 +19,7 @@ import {
   getDocs,
   query,
   orderBy,
+  where,
 } from "firebase/firestore";
 import { GoogleAuthProvider, getAuth, signInWithRedirect, onAuthStateChanged, signOut, } from "firebase/auth"
 
@@ -147,7 +148,7 @@ function App() {
 
   // Firestore에서 데이터를 읽어와 상태 동기화
   const syncTodoItemListStateWithFirestore = () => {
-    const q = query(collection(db, "todoItem"), orderBy("createdTime", "desc"));
+    const q = query(collection(db, "todoItem"), where("userId", "==", currentUser), orderBy("createdTime", "desc"));
 
     getDocs(q).then((querySnapshot) => {
       const firestoreTodoItemList = [];
@@ -167,7 +168,7 @@ function App() {
   // 최초 실행 시 Firestore와 동기화
   useEffect(() => {
     syncTodoItemListStateWithFirestore();
-  }, []);
+  }, [currentUser]);
 
   // add todo
   const onSubmit = async (newTodoItem) => {
