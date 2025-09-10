@@ -20,6 +20,7 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+import { GoogleAuthProvider, getAuth, signInWithRedirect, onAuthStateChanged, signOut, } from "firebase/auth"
 
 // Firebase 프로젝트 설정
 const firebaseConfig = {
@@ -36,6 +37,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
+
+const provider = new GoogleAuthProvider();
+const auth = getAuth(app);
 
 // ✅ 입력 필드 컴포넌트
 const TodoItemInputField = (props) => {
@@ -105,12 +109,24 @@ const TodoItemList = (props) => {
 };
 
 const TodoListAppBar = (props) => {
+  const loginWithGoogleButton = (
+    <Button color='inherit' onclick={()=>{
+      signInWithRedirect(auth, provider);
+    }}>Google로 로그인</Button>
+  );
+  const logoutButton = (
+    <Button color="inherit" onClick={()=>{
+      signOut(auth);
+    }}>로그아웃</Button>
+  );
+  const button = props.currentUser === null ? loginWithGoogleButton: logoutButton;
   return (
     <AppBar position = "static">
       <Toolbar>
         <Typography variant = "h6" component="div" sx={{flexGrow: 1}}>
           TO DO LIST APP
         </Typography>
+        {button}
       </Toolbar>
     </AppBar>
   )
@@ -118,7 +134,16 @@ const TodoListAppBar = (props) => {
 
 
 function App() {
+  const [currentUser, setCurrentUser] = useState(null);
   const [todoItemList, setTodoItemList] = useState([]);
+
+  onAuthStateChanged(auth, (user)=>{
+    if (user){
+      setCurrentUser(user.uid);
+    }else{
+      setCurrentUser(null);
+    }
+  })
 
   // Firestore에서 데이터를 읽어와 상태 동기화
   const syncTodoItemListStateWithFirestore = () => {
@@ -173,7 +198,7 @@ function App() {
 
   return (
     <div className="App">
-      <TodoListAppBar />
+      <TodoListAppBar currentUser={currentUser}/>
       <TodoItemInputField onSubmit={onSubmit} />
       <TodoItemList
         todoItemList={todoItemList}
