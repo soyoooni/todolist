@@ -1,7 +1,9 @@
-// 스타일 및 라이브러리 import
 import './App.css';
 import { useEffect, useState } from 'react';
 import TextField from '@mui/material/TextField';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 // Firebase SDK import
@@ -60,9 +62,8 @@ const TodoItemInputField = (props) => {
   );
 };
 
-// ✅ 할 일 아이템 컴포넌트
+// todo item component
 const TodoItem = (props) => {
-  // 완료된 아이템은 취소선 표시
   const style = props.todoItem.isFinished ? { textDecoration: 'line-through' } : {};
 
   return (
@@ -83,7 +84,7 @@ const TodoItem = (props) => {
   );
 };
 
-// ✅ 할 일 리스트 컴포넌트
+// to do list component
 const TodoItemList = (props) => {
   const todoList = props.todoItemList.map((todoItem, index) => {
     return (
@@ -103,7 +104,19 @@ const TodoItemList = (props) => {
   );
 };
 
-// ✅ 메인 App 컴포넌트
+const TodoListAppBar = (props) => {
+  return (
+    <AppBar position = "static">
+      <Toolbar>
+        <Typography variant = "h6" component="div" sx={{flexGrow: 1}}>
+          TO DO LIST APP
+        </Typography>
+      </Toolbar>
+    </AppBar>
+  )
+}
+
+
 function App() {
   const [todoItemList, setTodoItemList] = useState([]);
 
@@ -130,7 +143,7 @@ function App() {
     syncTodoItemListStateWithFirestore();
   }, []);
 
-  // 새 할 일 추가
+  // add todo
   const onSubmit = async (newTodoItem) => {
     await addDoc(collection(db, "todoItem"), {
       todoItemContent: newTodoItem,
@@ -140,7 +153,7 @@ function App() {
     syncTodoItemListStateWithFirestore();
   };
 
-  // 할 일 완료/취소 토글
+  // 클릭 시 완료 / 미완료
   const onTodoItemClick = async (clickedTodoItem) => {
     const todoItemRef = doc(db, "todoItem", clickedTodoItem.id);
     await setDoc(
@@ -151,7 +164,7 @@ function App() {
     syncTodoItemListStateWithFirestore();
   };
 
-  // 할 일 삭제
+  // todo remove component
   const onRemoveClick = async (removedTodoItem) => {
     const todoItemRef = doc(db, "todoItem", removedTodoItem.id);
     await deleteDoc(todoItemRef);
@@ -160,6 +173,7 @@ function App() {
 
   return (
     <div className="App">
+      <TodoListAppBar />
       <TodoItemInputField onSubmit={onSubmit} />
       <TodoItemList
         todoItemList={todoItemList}
