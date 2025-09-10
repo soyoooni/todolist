@@ -111,7 +111,7 @@ const TodoItemList = (props) => {
 
 const TodoListAppBar = (props) => {
   const loginWithGoogleButton = (
-    <Button color='inherit' onclick={()=>{
+    <Button color='inherit' onClick={()=>{
       signInWithRedirect(auth, provider);
     }}>Google로 로그인</Button>
   );
