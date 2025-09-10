@@ -21,13 +21,13 @@ import {
 
 // Firebase 프로젝트 설정
 const firebaseConfig = {
-  apiKey: "AIzaSyAPjYrRKj11e85Yx1ZaqFiZ6STbH-ciUT8",
-  authDomain: "todo-list-app-98806.firebaseapp.com",
-  projectId: "todo-list-app-98806",
-  storageBucket: "todo-list-app-98806.appspot.com",
-  messagingSenderId: "886143434487",
-  appId: "1:886143434487:web:b5227108bd4261291f9df2",
-  measurementId: "G-NGJKZTHLQN"
+  apiKey: "AIzaSyBVf30fDIHu9pkzdXIjcZGjEkUCGO1C_YQ",
+  authDomain: "todo-list-app-demo-aac73.firebaseapp.com",
+  projectId: "todo-list-app-demo-aac73",
+  storageBucket: "todo-list-app-demo-aac73.firebasestorage.app",
+  messagingSenderId: "385330372955",
+  appId: "1:385330372955:web:18b556c6f1482bdf4f7a7e",
+  measurementId: "G-G5NPS76ET7"
 };
 
 // Firebase 초기화
@@ -43,7 +43,7 @@ const TodoItemInputField = (props) => {
     props.onSubmit(input); // 부모(App)로 입력값 전달
     setInput("");          // 입력 필드 초기화
   };
-  
+
   return (
     <div>
       <TextField
